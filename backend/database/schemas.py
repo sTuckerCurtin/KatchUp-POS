@@ -162,10 +162,10 @@ transactions_schema = TransactionSchema(many=True)
 
 class OrderItems_Schema(ma.Schema):
     id = fields.Integer(primary_key=True)
-    quantity = fields.Integer(required=True)
-    order_id = fields.Integer(required=True)
+    quantity = fields.Integer(required=True, many=True)
+    order_id = fields.Integer(required=True, many=True)
     order = ma.Nested(OrderSchema, many=False)
-    menu_item_id = fields.Integer(required=True)
+    menu_item_id = fields.Integer(required=True, many=True)
     menu_item = ma.Nested(MenuItems_Schema)
 
     class Meta:
@@ -175,6 +175,6 @@ class OrderItems_Schema(ma.Schema):
     def create_ordered_items(self, data, **kwargs):
         return OrderItems(**data)
     
-order_item = OrderItems_Schema()
-order_items = OrderItems_Schema(many=True)
+order_item_scehma = OrderItems_Schema()
+orders_items_schema = OrderItems_Schema(many=True)
 

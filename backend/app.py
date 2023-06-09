@@ -6,8 +6,10 @@ from flask_restful import Api
 from flask_migrate import Migrate
 from database.models import db
 from database.schemas import ma
+from resources.order import UserOrderResource, ManagementOrderResource
 from resources.auth import LoginResource, RegisterResource
 from resources.cars import AllCarResource, UserCarResource
+from resources.order_items import ServerOrderItemResource
 from resources.menu_items import AllMenuItemsResource, ServerMenuResource, UserMenuResource
 from resources.table import AllTableResource, UserTableResource, AssignUserTableResource
 from dotenv import load_dotenv
@@ -65,4 +67,8 @@ def create_routes():
     api.add_resource(AllMenuItemsResource, "/api/menu_items")
     api.add_resource(ServerMenuResource, "/api/menu_items/<int:type_id>")
     api.add_resource(UserMenuResource, "/api/menu_items/<int:menu_item_id>")
+    api.add_resource(UserOrderResource, "/api/orders")
+    api.add_resource(ManagementOrderResource, "/api/orders/<int:order_id>")
+    api.add_resource(ServerOrderItemResource, "/api/order_items")
+
     return api

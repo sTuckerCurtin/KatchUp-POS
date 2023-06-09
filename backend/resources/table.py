@@ -9,6 +9,14 @@ class AllTableResource(Resource):
     def get(self):
         tables = Table.query.all()
         return tables_schema.dump(tables), 200
+    def post(self):
+        form_data=request.json
+        new_table = Table(name=form_data["name"],
+                          seats=form_data["seats"])
+        result = table_schema.dump(new_table)
+        db.session.add(new_table)
+        db.session.commit()
+        return {"message": f"{result} was created"}
 
 
 class UserTableResource(Resource):
