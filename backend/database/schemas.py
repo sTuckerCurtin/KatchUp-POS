@@ -104,7 +104,7 @@ class MenuItems_Schema(ma.Schema):
     type = ma.Nested(ItemType_Schema, many=False)
     
     class Meta:
-        fields= ('id', "dish_name", "price", "type_id", "type")
+        fields= ('id', "name", "price", "type_id", "type")
 
     @post_load
     def create_menu_item(self, data, **kwargs):

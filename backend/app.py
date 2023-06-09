@@ -8,6 +8,7 @@ from database.models import db
 from database.schemas import ma
 from resources.auth import LoginResource, RegisterResource
 from resources.cars import AllCarResource, UserCarResource
+from resources.menu_items import AllMenuItemsResource, ServerMenuResource, UserMenuResource
 from resources.table import AllTableResource, UserTableResource, AssignUserTableResource
 from dotenv import load_dotenv
 from os import environ
@@ -61,5 +62,7 @@ def create_routes():
     api.add_resource(AllTableResource, "/api/tables")
     api.add_resource(UserTableResource, "/api/user_tables")
     api.add_resource(AssignUserTableResource, "/api/<int:table_id>")
-    
+    api.add_resource(AllMenuItemsResource, "/api/menu_items")
+    api.add_resource(ServerMenuResource, "/api/menu_items/<int:type_id>")
+    api.add_resource(UserMenuResource, "/api/menu_items/<int:menu_item_id>")
     return api
