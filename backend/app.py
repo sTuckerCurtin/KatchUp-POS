@@ -8,8 +8,10 @@ from database.models import db
 from database.schemas import ma
 from resources.auth import LoginResource, RegisterResource
 from resources.cars import AllCarResource, UserCarResource
+from resources.table import AllTableResource, UserTableResource, AssignUserTableResource
 from dotenv import load_dotenv
 from os import environ
+
 
 # Adds variables from .env file to environment
 load_dotenv()
@@ -56,5 +58,8 @@ def create_routes():
     api.add_resource(AllCarResource, '/api/cars')
     api.add_resource(UserCarResource, '/api/user_cars')
     # TODO: Create files for your Resources in resources folder, add them here
+    api.add_resource(AllTableResource, "/api/tables")
+    api.add_resource(UserTableResource, "/api/user_tables")
+    api.add_resource(AssignUserTableResource, "/api/<int:table_id>")
     
     return api

@@ -1,6 +1,6 @@
 from flask_marshmallow import Marshmallow
 from marshmallow import post_load, fields
-from database.models import User, Car
+from database.models import User, Car, Table, ItemType, MenuItem, Transaction, Order, OrderItems
 
 ma = Marshmallow()
 
@@ -11,15 +11,14 @@ class RegisterSchema(ma.Schema):
     """
     id = fields.Integer(primary_key=True)
     username = fields.String(required=True)
-    password = fields.String(required=True)
     first_name = fields.String(required=True)
     last_name = fields.String(required=True)
     email = fields.String(required=True)
-    pin = fields.List(fields.Integer(), required=True)
+    pin = fields.Integer(required=True)
     is_manager = fields.Boolean(missing=False)
     
     class Meta:
-        fields = ("id", "username",  "password", "first_name", "last_name", "email", "pins", "is_manager")
+        fields = ("id", "username",  "password", "first_name", "last_name", "email", "pin", "is_manager")
 
     @post_load
     def create_user(self, data, **kwargs):
@@ -33,6 +32,7 @@ class UserSchema(ma.Schema):
     username = fields.String(required=True)
     first_name = fields.String(required=True)
     last_name = fields.String(required=True)
+    pin = fields.Integer(required=True)
     email = fields.String(required=True)
     
     class Meta:
@@ -65,79 +65,116 @@ cars_schema = CarSchema(many=True)
 
 # TODO: Add your schemas below
 
-# class TableSchema(ma.Schema):
-#     id = fields.Integer(primary_key=True)
-#     name = fields.String(required=True)
-#     user_id= fields.Integer()
-#     user = ma.Nested(UserSchema, many=False)
-#     class Meta:
-#         fields = ("id", "table_name", "user_id", "user")
+class TableSchema(ma.Schema):
+    id = fields.Integer(primary_key=True)
+    name = fields.String(required=True)
+    seats = fields.Integer()
+    user_id= fields.Integer()
+    user = ma.Nested(UserSchema, many=False)
+    class Meta:
+        fields = ("id", "name","seats", "user_id", "user")
 
-#     @post_load
-#     def create_table(self, data, **kwargs):
-#         return Table(**data)
+    @post_load
+    def create_table(self, data, **kwargs):
+        return Table(**data)
     
-# table_schema = TableSchema()
-# tables_schema = TableSchema(many=True)
+table_schema = TableSchema()
+tables_schema = TableSchema(many=True)
 
-# class Categorized_dishes_Schema(ma.Schema):
-#     id = fields.Integer(primary_key=True)
-#     dish_type = fields.String(required=True)
+class ItemType_Schema(ma.Schema):
+    id = fields.Integer(primary_key=True)
+    type = fields.String(required=True)
 
-#     class Meta:
-#         fields = ("id", "dish_type")
+    class Meta:
+        fields = ("id", "type")
 
-#     @post_load
-#     def create_cat_dish(self, data, **kwargs):
-#         return Categorized_dishes(**data)
+    @post_load
+    def create_Item(self, data, **kwargs):
+        return ItemType(**data)
     
-# categorized_dish_schema = Categorized_dishes_Schema()
-# categorized_dishes_schema = Categorized_dishes_Schema(many=True)
+categorized_dish_schema = ItemType_Schema()
+categorized_dishes_schema = ItemType_Schema(many=True)
 
 
-# class Menu_items_Schema(ma.Schema):
-#     id = fields.Integer(primary_key=True)
-#     dish_name = fields.String(required=True)
-#     price = fields.Float(required=True)
-#     dish_type_id = fields.Integer(required=True)
-#     dish_type = ma.Nested(Categorized_dishes_Schema, many=False)
+class MenuItems_Schema(ma.Schema):
+    id = fields.Integer(primary_key=True)
+    name = fields.String(required=True)
+    price = fields.Float(required=True)
+    type_id = fields.Integer(required=True)
+    type = ma.Nested(ItemType_Schema, many=False)
     
-#     class Meta:
-#         fields= ('id', "dish_name", "price", "dish_type_id", "dish_type")
+    class Meta:
+        fields= ('id', "dish_name", "price", "type_id", "type")
 
-#     @post_load
-#     def create_menu_item(self, data, **kwargs):
-#         return Menu_items(**data)
+    @post_load
+    def create_menu_item(self, data, **kwargs):
+        return MenuItem(**data)
     
-# menu_item_schema= Menu_items_Schema()
-# menu_items_schema = Menu_items_Schema(many=True)
+menu_item_schema= MenuItems_Schema()
+menu_items_schema = MenuItems_Schema(many=True)
 
 
-# class TransactionSchema(ma.Schema):
-#     id = fields.Integer(primary_key=True)
-#     total = fields.Float(required=True)
-#     date = fields.Date(required=True)
-#     menu_item_id = fields.Integer(required=True)
-#     menu_item = ma.Nested(Menu_items_Schema)
-#     user_id = fields.Integer(required=True)
-#     user = ma.Nested(UserSchema, many=False)
-#     payment_id = fields.Integer(required=True)
-#     status = fields.String()
-#     amount_paid= fields.Float()
-#     currency = fields.String()
-#     payment_method = fields.String(required=True)
 
-#     class Meta:
-#         fields = ('id', 'total', 'date', 'menu_item_id', 'menu_item',
-#                   'user_id', 'user', 'payment_id', 'status', 'amount_paid',
-#                   'currency', 'payment_method')
+
+class OrderSchema(ma.Schema):
+    id = fields.Integer(pimary_key=True)
+    table_id = fields.Integer(required=True)
+    table = ma.Nested(TableSchema, many=False)
+    user_id = fields.Integer(required=True)
+    user = ma.Nested(UserSchema, many=False)
+
+    class Meta:
+        fields = ("id", "table_id", "table", "user_id", "user")
+
+    @post_load
+    def create_order(self, data, **kwargs):
+        return Order(**data)
+
+    
+
+order_schema = OrderSchema()
+orders_schema = OrderSchema(many=False)
+
+
+class TransactionSchema(ma.Schema):
+    id = fields.Integer(primary_key=True)
+    payment_id = fields.String(required=True)
+    created_at = fields.Date(required=True)
+    amount = fields.Float(required=True)
+    order_id = fields.Integer(required=True)
+
+    order = ma.Nested(OrderSchema, many=False)
+   
+    
+
+
+    class Meta:
+        fields = ('id', "payment_id", "created_at", "amount", "order_id", "order")
         
-#     @post_load
-#     def create_transaction(self, data, **kwargs):
-#         return Transaction(**data)
+    @post_load
+    def create_transaction(self, data, **kwargs):
+        return Transaction(**data)
 
-# transaction_schema = TransactionSchema()
-# transactions_schema = TransactionSchema(many=True)
+transaction_schema = TransactionSchema()
+transactions_schema = TransactionSchema(many=True)
 
 
+
+class OrderItems_Schema(ma.Schema):
+    id = fields.Integer(primary_key=True)
+    quantity = fields.Integer(required=True)
+    order_id = fields.Integer(required=True)
+    order = ma.Nested(OrderSchema, many=False)
+    menu_item_id = fields.Integer(required=True)
+    menu_item = ma.Nested(MenuItems_Schema)
+
+    class Meta:
+        fields = ("id", "quantity", "order_id", "order", "menu_item_id", "menu_item")
+
+    @post_load
+    def create_ordered_items(self, data, **kwargs):
+        return OrderItems(**data)
+    
+order_item = OrderItems_Schema()
+order_items = OrderItems_Schema(many=True)
 
