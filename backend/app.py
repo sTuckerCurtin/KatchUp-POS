@@ -8,8 +8,9 @@ from database.models import db
 from database.schemas import ma
 from resources.order import UserOrderResource, ManagementOrderResource
 from resources.auth import LoginResource, RegisterResource
+from resources.transaction import UserTransactionResource
 from resources.cars import AllCarResource, UserCarResource
-from resources.order_items import ServerOrderItemResource
+from resources.order_items import ServerOrderItemResource,EditOrderResource
 from resources.menu_items import AllMenuItemsResource, ServerMenuResource, UserMenuResource
 from resources.table import AllTableResource, UserTableResource, AssignUserTableResource
 from dotenv import load_dotenv
@@ -70,5 +71,6 @@ def create_routes():
     api.add_resource(UserOrderResource, "/api/orders")
     api.add_resource(ManagementOrderResource, "/api/orders/<int:order_id>")
     api.add_resource(ServerOrderItemResource, "/api/order_items")
-
+    api.add_resource(EditOrderResource, "/api/order_items/<int:order_item_id>")
+    api.add_resource(UserTransactionResource, "/api/transactions")
     return api
