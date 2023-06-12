@@ -7,6 +7,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import ServicePage from "./pages/ServicePage/ServicePage";
+import TableNav from "./pages/TableNav/TableNav";
 
 // Component Imports
 import Navbar from "./components/NavBar/NavBar";
@@ -32,6 +33,13 @@ function App() {
         element={
           <PrivateRoute>
             <ServicePage/>
+          </PrivateRoute>
+        }
+        />
+        <Route path="table"
+        element={
+          <PrivateRoute>
+            <TableNav/>
           </PrivateRoute>
         }
         />

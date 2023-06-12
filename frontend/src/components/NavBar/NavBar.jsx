@@ -21,6 +21,11 @@ const Navbar = () => {
           </Link>
         </li>
         <li>
+          <Link to="table" style={{ textDecoration: "none", color: "white" }}>
+            <b>Table Menu</b>
+          </Link>
+        </li>
+        <li>
           {user ? (
             <button onClick={logoutUser}>Logout</button>
           ) : (
