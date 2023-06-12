@@ -10,7 +10,7 @@ from resources.order import UserOrderResource, ManagementOrderResource
 from resources.auth import LoginResource, RegisterResource
 from resources.transaction import UserTransactionResource, ManagerTransactionResource
 from resources.cars import AllCarResource, UserCarResource
-from resources.order_items import ServerOrderItemResource,EditOrderResource
+from resources.order_items import ServerOrderItemResource,EditOrderResource, CheckResource
 from resources.menu_items import AllMenuItemsResource, ServerMenuResource, UserMenuResource
 from resources.table import AllTableResource, UserTableResource, AssignUserTableResource
 from dotenv import load_dotenv
@@ -71,6 +71,7 @@ def create_routes():
     api.add_resource(UserOrderResource, "/api/orders")
     api.add_resource(ManagementOrderResource, "/api/orders/<int:order_id>")
     api.add_resource(ServerOrderItemResource, "/api/order_items")
+    api.add_resource(CheckResource, "/api/order_items/<int:order_id>")
     api.add_resource(EditOrderResource, "/api/order_items/<int:order_item_id>")
     api.add_resource(UserTransactionResource, "/api/transactions")
     api.add_resource(ManagerTransactionResource, "/api/transactions/<int:transaction_id>")

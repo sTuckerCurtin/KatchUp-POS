@@ -45,6 +45,12 @@ class ManagementOrderResource(Resource):
         db.session.commit()
         return f"removed {deleted_order} from DB", 204
 
-
-
+    
+    @jwt_required()
+    def get(self, order_id):
+        user_id = get_jwt_identity()
+        order = Order.query.get(order_id)
+        if not order:
+            return {'message': 'Order not found'}, 404
+        return order_schema.dump(order), 200
 
