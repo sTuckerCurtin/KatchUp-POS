@@ -65,21 +65,7 @@ cars_schema = CarSchema(many=True)
 
 # TODO: Add your schemas below
 
-class TableSchema(ma.Schema):
-    id = fields.Integer(primary_key=True)
-    name = fields.String(required=True)
-    seats = fields.Integer()
-    user_id= fields.Integer()
-    user = ma.Nested(UserSchema, many=False)
-    class Meta:
-        fields = ("id", "name","seats", "user_id", "user")
 
-    @post_load
-    def create_table(self, data, **kwargs):
-        return Table(**data)
-    
-table_schema = TableSchema()
-tables_schema = TableSchema(many=True)
 
 class ItemType_Schema(ma.Schema):
     id = fields.Integer(primary_key=True)
@@ -116,24 +102,45 @@ menu_items_schema = MenuItems_Schema(many=True)
 
 
 
+class TableSchema(ma.Schema):
+    id = fields.Integer(primary_key=True)
+    name = fields.String(required=True)
+    seats = fields.Integer()
+    user_id = fields.Integer()
+    user = ma.Nested(UserSchema, many=False)
+    
+    class Meta:
+        fields = ("id", "name", "seats", "user_id", "user")
+
+    @post_load
+    def create_table(self, data, **kwargs):
+        return Table(**data)
+    
+table_schema = TableSchema()
+tables_schema = TableSchema(many=True)
+
+
 class OrderSchema(ma.Schema):
-    id = fields.Integer(pimary_key=True)
+    id = fields.Integer(primary_key=True)
     table_id = fields.Integer(required=True)
     table = ma.Nested(TableSchema, many=False)
     user_id = fields.Integer(required=True)
     user = ma.Nested(UserSchema, many=False)
+    items = ma.Nested("OrderItems_Schema", many=True, exclude=("order",))
+    is_completed = fields.Boolean()
 
     class Meta:
-        fields = ("id", "table_id", "table", "user_id", "user")
+        fields = ("id", "table_id", "table", "user_id", "user", "items")
 
     @post_load
     def create_order(self, data, **kwargs):
         return Order(**data)
 
-    
-
 order_schema = OrderSchema()
 orders_schema = OrderSchema(many=False)
+
+
+
 
 
 class TransactionSchema(ma.Schema):
@@ -177,4 +184,3 @@ class OrderItems_Schema(ma.Schema):
     
 order_item_scehma = OrderItems_Schema()
 orders_items_schema = OrderItems_Schema(many=True)
-

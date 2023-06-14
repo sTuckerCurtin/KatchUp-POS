@@ -30,7 +30,7 @@ class LoginResource(Resource):
             User.query.filter_by(username=form_data.get('username')),
             description=f"No user with that username."
         )
-        authorized = user.pin == form_data.get('pin')
+        authorized = user.pin == int(form_data.get('pin'))
         if not authorized:
             return {'error': 'Username or PIN invalid'}, 401
         expires = datetime.timedelta(days=7)

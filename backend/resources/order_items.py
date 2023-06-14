@@ -12,6 +12,8 @@ class ServerOrderItemResource(Resource):
         return orders_items_schema.dump(order_items)
     
 
+ 
+
     @jwt_required()
     def post(self):
         form_data = request.get_json()
@@ -20,8 +22,8 @@ class ServerOrderItemResource(Resource):
         if isinstance(order_items, list):
             new_order_items = []
             for order_item in order_items:
-                order_id = order_item.get('order_id')
-                menu_item_id = order_item.get('menu_item_id')
+                order_id = order_item.order_id
+                menu_item_id = order_item.menu_item_id
 
                 if not order_id or not menu_item_id:
                     return {"error": "Missing order_id or menu_item_id"}, 400
@@ -36,6 +38,7 @@ class ServerOrderItemResource(Resource):
             return result, 201
 
         return {"error": "Invalid order item data"}, 400
+
 
 
     

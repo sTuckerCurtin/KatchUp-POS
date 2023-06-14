@@ -29,14 +29,14 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route path="serve"
+        <Route path="/serve/:table_id"
         element={
           <PrivateRoute>
-            <ServicePage/>
+            <ServicePage />
           </PrivateRoute>
         }
         />
-        <Route path="table"
+        <Route path="/table"
         element={
           <PrivateRoute>
             <TableNav/>

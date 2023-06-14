@@ -1,42 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 
-
 const TableNav = () => {
-  const [tableDetails, setTables] = useState(null);
-  const [server, setServer]= useState(null)
-  const [isUser, setIsUser] = useState(null)
-  const [order, setOrder] = useState(null)
-  const { id } = useParams();
+  const [tableDetails, setTableDetails] = useState([]);
   const [user, token] = useAuth();
+  const [order_id, setOrderID] = useState(null);
 
   const fetchTableDetails = async () => {
     try {
-      const response = await axios.get(`http://127.0.0.1:5000/api/tables`);
-      setTables(response.data);
-      console.log(response.data)
+      const response = await axios.get('http://127.0.0.1:5000/api/tables');
+      const updatedTableDetails = response.data.map(table => ({
+        ...table,
+        order_id: null 
+      }));
+      setTableDetails(updatedTableDetails);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const AssignTableDetails = async (table_id, user_id) => {
+  const assignTableDetails = async (table_id) => {
     try {
-        const config = {headers: {Authorization: `Bearer ${token}`}}
-      const [response1, response2] = await Promise.all([
-        axios.put(`http://127.0.0.1:5000/api/${table_id}`, { ownerId: user_id }, config),
-        axios.post(`http://127.0.0.1:5000/api/orders`, {table_id: table_id}, config)
-      ]);
-  
-      setServer(response1.data);
-      setOrder(response2.data)
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+      await axios.put(`http://127.0.0.1:5000/api/${table_id}`, null, config);
+      fetchTableDetails();
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data);
     }
-  }
-  
+  };
+
+  const unassignTableDetails = async (table_id) => {
+    try {
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+      await axios.delete(`http://127.0.0.1:5000/api/${table_id}`, config);
+      fetchTableDetails();
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
 
   useEffect(() => {
     fetchTableDetails();
@@ -45,13 +53,19 @@ const TableNav = () => {
   return (
     <div>
       <h1>Tables</h1>
-      {tableDetails && tableDetails.map((table) => (
+      {tableDetails.map((table) => (
         <div key={table.id}>
           <h2>{table.name}</h2>
-          <h2> Seats: {table.seats}</h2>
-          <h3> User: {table.user_id}</h3>
-          <button onClick={() => AssignTableDetails(table.id, table.user_id)}>Start Table</button><button>View</button>
+          <h3>Seats: {table.seats}</h3>
+          <h3>User: {table.user_id}</h3>
           
+          <Link to={`/serve/${table.id}`}>
+            <button onClick={() => assignTableDetails(table.id)}>Assign Server and Start Order</button>
+          </Link>
+          <button onClick={() => unassignTableDetails(table.id)}>Unassign Server from table</button>
+          <Link to={`/serve/${table.id}`}>
+            <button>Order Menu</button>
+          </Link>
         </div>
       ))}
     </div>

@@ -69,6 +69,8 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     table_id = db.Column(db.Integer, db.ForeignKey("table.id"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    is_completed = db.Column(db.Boolean, default=False)
+
 
     user = db.relationship("User")
     table = db.relationship("Table")
@@ -79,7 +81,6 @@ class OrderItems(db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey("order.id"), nullable=False)
     menu_item_id = db.Column(db.Integer, db.ForeignKey("menu_item.id"), nullable=False)
 
-    order = db.relationship("Order")
+    order = db.relationship("Order", backref=db.backref("items"))
     menu_item = db.relationship("MenuItem")
-
 

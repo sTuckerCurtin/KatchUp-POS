@@ -23,7 +23,9 @@ class UserOrderResource(Resource):
         db.session.add(order)
         db.session.commit()
 
-        return {'message': 'Order created successfully'}, 201
+        return {"order_id":order.id,
+                "table_id": table_id,
+                "user_id": user_id}, 201
     
 class ManagementOrderResource(Resource):
     @jwt_required()
