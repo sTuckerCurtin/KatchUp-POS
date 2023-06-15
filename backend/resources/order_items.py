@@ -5,15 +5,23 @@ from flask_restful import Resource
 from database.models import db, OrderItems, Order, Transaction
 from database.schemas import order_item_scehma, orders_items_schema
 
+class OrderItemsResource(Resource):
+    @jwt_required()
+    def post(self, order_id):
+        form_data = request.get_json()
+        form_data["order_id"]=order_id
+        new_order_item = order_item_scehma.load(form_data)
+        db.session.add(new_order_item)
+        db.session.commit()
+        return order_item_scehma.dump(new_order_item), 201
+
+    
 
 class ServerOrderItemResource(Resource):
     def get(self):
         order_items= OrderItems.query.all()
         return orders_items_schema.dump(order_items)
     
-
- 
-
     @jwt_required()
     def post(self):
         form_data = request.get_json()
@@ -45,7 +53,7 @@ class ServerOrderItemResource(Resource):
 class EditOrderResource(Resource):
     @jwt_required()
     def put(self, order_item_id):
-        user_id = get_jwt_identity()
+      
         edit_order_item = OrderItems.query.get_or_404(order_item_id)
         if "quantity" in request.json:
             edit_order_item.quantity = request.json["quantity"]
@@ -87,3 +95,4 @@ def calculate_total_price(order_items):
 
     total_price = sum(order_item.menu_item.price for order_item in order_items)
     return total_price
+

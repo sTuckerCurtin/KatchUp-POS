@@ -73,7 +73,7 @@ class Order(db.Model):
 
 
     user = db.relationship("User")
-    table = db.relationship("Table")
+    table = db.relationship("Table", backref=db.backref("orders") )
 
 class OrderItems(db.Model):
     id = db.Column(db.Integer, primary_key=True)

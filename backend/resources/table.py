@@ -2,8 +2,8 @@ from flask import Flask
 from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
 from flask_restful import Resource
-from database.models import db, Table
-from database.schemas import table_schema, tables_schema, UserSchema  
+from database.models import db, Table, Order
+from database.schemas import table_schema, tables_schema, order_schema
 
 class AllTableResource(Resource):
     def get(self):
@@ -27,19 +27,27 @@ class UserTableResource(Resource):
         return tables_schema.dump(user_table), 200
     
 
-class AssignUserTableResource(Resource):
+class TableResource(Resource):
+    @jwt_required()
+    def get(self, table_id):
+        table = Table.query.get_or_404(table_id)
+        return table_schema.dump(table)
 
     @jwt_required()
-    def put(self, table_id):
-        user_id = get_jwt_identity()
-        table = Table.query.get(table_id)
-        if not table:
-            return {"message": f"No table with id {table_id} found."}, 404
-        if table.user_id is not None:
-            return {"message": "Table already assigned."}, 409
-        table.user_id = user_id
+    def put(self, table_id ):
+        table = Table.query.get_or_404(table_id)
+
+        if table.user_id == get_jwt_identity():
+            return {"message": "User already assigned"}, 400
+
+        if "user_id" in request.json:
+            user_id = request.json["user_id"]
+            table.user_id = user_id
+            if table.user_id is not None:
+                new_order = Order(table_id=table_id, user_id=user_id)
+                db.session.add(new_order)
         db.session.commit()
-        return {"message": f"Table {table_id} successfully assigned to user {user_id}."}
+        return table_schema.dump(table)
     
     
     @jwt_required()

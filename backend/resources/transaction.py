@@ -2,7 +2,7 @@ from flask import Flask
 from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
 from flask_restful import Resource
-from database.models import db, Transaction
+from database.models import db, Transaction, Order
 from database.schemas import transaction_schema, transactions_schema
 
 
@@ -19,10 +19,12 @@ class UserTransactionResource(Resource):
             created_at=form_data["created_at"],
             amount=form_data['amount'],
             order_id = form_data["order_id"])
-        result = transaction_schema.dump(new_transaction)
+        order = Order.query.get_or_404(form_data["order_id"])
+        order.is_completed = True
+
         db.session.add(new_transaction)
         db.session.commit()
-        return {"messaage": f"{result} was created "}
+        return transaction_schema.dump(new_transaction)
     
 
 class ManagerTransactionResource(Resource):

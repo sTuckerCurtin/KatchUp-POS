@@ -56,3 +56,27 @@ class ManagementOrderResource(Resource):
             return {'message': 'Order not found'}, 404
         return order_schema.dump(order), 200
 
+class getCheckByTableID(Resource):
+    @jwt_required()
+    def get(self, table_id):
+        order = Order.query.filter_by(table_id=table_id).first()
+
+        order_item_data = []
+        for item in order.items:
+            menu_item = item.menu_item
+            item_data = {
+                "id": menu_item.id,
+                "name": menu_item.name,
+                "price": menu_item.price
+            }
+            order_item_data.append(item_data)
+
+        response = {
+            "order_items": order_item_data
+        }
+
+        return response
+
+
+
+

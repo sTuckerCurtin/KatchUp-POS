@@ -6,13 +6,13 @@ from flask_restful import Api
 from flask_migrate import Migrate
 from database.models import db
 from database.schemas import ma
-from resources.order import UserOrderResource, ManagementOrderResource
+from resources.order import UserOrderResource, ManagementOrderResource, getCheckByTableID
 from resources.auth import LoginResource, RegisterResource
 from resources.transaction import UserTransactionResource, ManagerTransactionResource
 from resources.cars import AllCarResource, UserCarResource
-from resources.order_items import ServerOrderItemResource,EditOrderResource, CheckResource
+from resources.order_items import ServerOrderItemResource,EditOrderResource, CheckResource, OrderItemsResource
 from resources.menu_items import AllMenuItemsResource, ServerMenuResource, UserMenuResource
-from resources.table import AllTableResource, UserTableResource, AssignUserTableResource
+from resources.table import AllTableResource, UserTableResource, TableResource
 from dotenv import load_dotenv
 from os import environ
 
@@ -64,7 +64,7 @@ def create_routes():
     # TODO: Create files for your Resources in resources folder, add them here
     api.add_resource(AllTableResource, "/api/tables")
     api.add_resource(UserTableResource, "/api/user_tables")
-    api.add_resource(AssignUserTableResource, "/api/<int:table_id>")
+    api.add_resource(TableResource, "/api/tables/<int:table_id>")
     api.add_resource(AllMenuItemsResource, "/api/menu_items")
     api.add_resource(ServerMenuResource, "/api/menu_items/<int:type_id>")
     api.add_resource(UserMenuResource, "/api/menu_items/<int:menu_item_id>")
@@ -75,4 +75,6 @@ def create_routes():
     api.add_resource(EditOrderResource, "/api/order_items/<int:order_item_id>")
     api.add_resource(UserTransactionResource, "/api/transactions")
     api.add_resource(ManagerTransactionResource, "/api/transactions/<int:transaction_id>")
+    api.add_resource(getCheckByTableID, "/api/check/<int:table_id>")
+    api.add_resource(OrderItemsResource, "/api/orders/<int:order_id>/items")
     return api

@@ -108,9 +108,10 @@ class TableSchema(ma.Schema):
     seats = fields.Integer()
     user_id = fields.Integer()
     user = ma.Nested(UserSchema, many=False)
+    orders= ma.Nested("OrderSchema", many=True)
     
     class Meta:
-        fields = ("id", "name", "seats", "user_id", "user")
+        fields = ("id", "name", "seats", "user_id", "user", "orders")
 
     @post_load
     def create_table(self, data, **kwargs):
@@ -123,14 +124,13 @@ tables_schema = TableSchema(many=True)
 class OrderSchema(ma.Schema):
     id = fields.Integer(primary_key=True)
     table_id = fields.Integer(required=True)
-    table = ma.Nested(TableSchema, many=False)
     user_id = fields.Integer(required=True)
     user = ma.Nested(UserSchema, many=False)
-    items = ma.Nested("OrderItems_Schema", many=True, exclude=("order",))
+    items = ma.Nested("OrderItems_Schema", many=True)
     is_completed = fields.Boolean()
 
     class Meta:
-        fields = ("id", "table_id", "table", "user_id", "user", "items")
+        fields = ("id", "table_id",  "user_id", "user", "items", "is_completed")
 
     @post_load
     def create_order(self, data, **kwargs):
@@ -176,7 +176,7 @@ class OrderItems_Schema(ma.Schema):
     menu_item = ma.Nested(MenuItems_Schema)
 
     class Meta:
-        fields = ("id", "quantity", "order_id", "order", "menu_item_id", "menu_item")
+        fields = ("id", "quantity", "order_id", "menu_item_id", "menu_item")
 
     @post_load
     def create_ordered_items(self, data, **kwargs):
