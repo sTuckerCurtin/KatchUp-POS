@@ -31,7 +31,7 @@ const LoginPage = () => {
           />
         </label>
         <label>
-          Password:
+          PIN:
           <input
             type="password"
             name="pin"

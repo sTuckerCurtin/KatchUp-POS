@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./ServerReports.css"
 
 function ServerReports({ user_id }) {
   const [serverReport, setServerReport] = useState(null);
@@ -7,7 +9,9 @@ function ServerReports({ user_id }) {
   useEffect(() => {
     const fetchServerReport = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:5000/api/check/${user_id}`);
+        const response = await axios.get(
+          `http://127.0.0.1:5000/api/check/${user_id}`
+        );
         setServerReport(response.data);
       } catch (error) {
         console.error(error);
@@ -21,10 +25,12 @@ function ServerReports({ user_id }) {
     <div>
       {serverReport ? (
         <div>
-          <h2>Server Report</h2>
-          <p>User ID: {user_id}</p>
-          <p>Order Items:</p>
-          <table>
+          <div className="homepageinfo">
+            <h2>Server Report</h2>
+            <p>User ID: {user_id}</p>
+          </div>
+        
+          <table className="table table-dark table-striped">
             <thead>
               <tr>
                 <th>Order ID</th>

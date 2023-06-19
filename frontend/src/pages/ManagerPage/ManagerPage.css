@@ -1,0 +1,23 @@
+.position{
+    width: 357px;
+    position: relative;
+    left: 700px;
+    margin-top: -200px;
+}
+.title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.addposition{
+    position: relative;
+    display: table-caption;
+    right: -159px;
+    bottom: -100px;
+    background-color: darkgray;
+}
+
+.pagelayout{
+    padding: 10px;
+}

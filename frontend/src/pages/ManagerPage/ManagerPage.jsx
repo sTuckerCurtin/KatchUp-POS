@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
+import "./ManagerPage.css"
 
 function ManagerPage() {
   const [menuItems, setMenuItems] = useState([]);
@@ -84,13 +85,15 @@ function ManagerPage() {
       );
     }
   };
-  
+
   useEffect(() => {
     getAllOrders();
   }, []);
   return (
-    <div>
-      <div>
+    <div className="pagelayout">
+      <h1 className="title">Manager Page</h1>
+      <hr/>
+      <div className="content-wrapper addposition">
         <h2>Add New Item</h2>
         <form onSubmit={postNewItem}>
           <div>
@@ -126,16 +129,26 @@ function ManagerPage() {
       </div>
 
       <div>
-        <h2>Menu Items</h2>
-        {menuItems.map((menuItem) => (
-          <div key={menuItem.id}>
-            <div>Type ID: {menuItem.type_id}</div>
-            <div>Name: {menuItem.name}</div>
-            <div>Price: ${menuItem.price}</div>
-            <div>---------------------</div>
-          </div>
-        ))}
+        <table className="table table-dark table-striped position">
+          <thead>
+            <tr>
+              <th colSpan="4">
+                <h2>Menu Items</h2>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {menuItems.map((menuItem) => (
+              <tr key={menuItem.id}>
+                <td>Type ID: {menuItem.type_id}</td>
+                <td>Name: {menuItem.name}</td>
+                <td>Price: ${menuItem.price}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+      <hr />
 
       <div>
         <h2>Employees</h2>
@@ -146,33 +159,36 @@ function ManagerPage() {
             <div>Pin: {employee.pin}</div>
             <div>Is Manager: {employee.is_manager ? "Yes" : "No"}</div>
             <div>---------------------</div>
-            <Link to="/register">Add New User</Link>
+            <Link to="/register">
+              <button>Add New User</button>
+              </Link>
           </div>
         ))}
       </div>
+      <hr />
       <div>
       <h2>Orders</h2>
-      {orders.map((order) => (
-        <div key={order.id}>
-          <div>Order ID: {order.id}</div>
-          <div>Server ID: {order.user_id}</div>
-          <div>Table: {order.table_id}</div>
-          <div>Items:</div>
-          <ul>
-            {order.items.map((item) => (
-              <li key={item.id}>
-                <div>Item: {item.menu_item.name}</div>
-                <div>Price: {item.menu_item.price}</div>
-                <div>Quantity: {item.quantity}</div>
-              </li>
-            ))}
-          </ul>
-          <div>---------------------</div>
-        </div>
-      ))}
+        {orders.map((order) => (
+          <div key={order.id}>
+            <div>Order ID: {order.id}</div>
+            <div>Server ID: {order.user_id}</div>
+            <div>Table: {order.table_id}</div>
+            <div>Items:</div>
+            <ul className="list-group">
+              {order.items.map((item) => (
+                <li key={item.id} className="list-group-item">
+                  <div>Item: {item.menu_item.name}</div>
+                  <div>Price: {item.menu_item.price}</div>
+                  <div>Quantity: {item.quantity}</div>
+                </li>
+              ))}
+            </ul>
+            <hr className="my-4" />
+          </div>
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
 }
 
 export default ManagerPage;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import "./TableNav.css"
 
 const TableNav = () => {
   const [tables, setTables] = useState([]);
@@ -58,28 +59,50 @@ const TableNav = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Tables</h1>
+    <div className="container-fluid">
+      <h1 className="headerpos">Dining Room</h1>
+      <hr/>
       {tables.map((table) => (
-        <div key={table.id}>
-          <h2>{table.name}</h2>
-          <h3>Seats: {table.seats}</h3>
-          <h3>User: {table.user_id}</h3>
-
-          <button onClick={() => assignTableDetails(table.id)}>
-            Assign Server and Start Order
-          </button>
-
-          <button onClick={() => unassignTableDetails(table.id)}>
-            Unassign Server from table
-          </button>
-          <Link to={`/serve/${table.id}`}>
-            <button>Order Menu</button>
-          </Link>
+        <div key={table.id} className="mb-4">
+          <h2 className="headerpos">{table.name}</h2>
+          <div className="row align-items-center">
+            <div className="col-6">
+              <h2 className="mb-2 infopos">
+                Seats: {table.seats} | User: {table.user_id}
+              </h2>
+            </div>
+            <div className="col-6">
+              <div className="row">
+                <div className="col">
+                  <button
+                    className="btn btn-success me-2"
+                    onClick={() => assignTableDetails(table.id)}
+                  >
+                    Assign Server and Start Order
+                  </button>
+                </div>
+                <div className="col">
+                  <button
+                    className="btn btn-success me-2"
+                    onClick={() => unassignTableDetails(table.id)}
+                  >
+                    Unassign Server from Table
+                  </button>
+                </div>
+                <div className="col">
+                  <Link to={`/serve/${table.id}`}>
+                    <button className="btn btn-success">Order Menu</button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
         </div>
       ))}
     </div>
   );
-};
+}
+
 
 export default TableNav;

@@ -39,7 +39,7 @@ function Transaction({ order_id, totalPrice }) {
 
   return (
     <div>
-      <h1>Complete Transaction</h1>
+      <h3>Complete Transaction</h3>
 
       <div>Total Price: {totalPrice}</div>
 

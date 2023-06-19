@@ -29,7 +29,7 @@ const ServicePage = () => {
   return (
     table && (
       <div>
-        <h1>Table Name: {table.name}</h1>
+        <h1>{table.name}</h1>
         {table.orders.map((order) =>(
           <Order order={order} />
         ))}

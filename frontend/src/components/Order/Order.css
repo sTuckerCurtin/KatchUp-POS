@@ -1,0 +1,13 @@
+.sidebutton{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    top: -284px;
+}
+
+.tranbuttons{
+    position: relative;
+    left: 850px;
+    top: -285px;
+}
+

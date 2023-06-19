@@ -1,0 +1,11 @@
+.headerpos{
+    display: flex;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.infopos{
+    position: relative;
+    right: -195px;
+}

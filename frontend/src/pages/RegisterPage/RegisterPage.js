@@ -56,7 +56,7 @@ const RegisterPage = () => {
           />
         </label>
         <label>
-          Password:{" "}
+          Pin:{" "}
           <input
             type="password"
             name="password"
