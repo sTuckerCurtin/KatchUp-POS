@@ -4,10 +4,9 @@ import useAuth from "../../hooks/useAuth";
 import ServicePage from "../../pages/ServicePage/ServicePage";
 
 
-function MenuItem({ menuItem, order_id}) {
+function MenuItem({ menuItem, order_id, }) {
   const [user, token] = useAuth();
-  // menuItem.id
-
+ 
   const addOrderItem = async () => {
     try {
       const config = {
@@ -18,9 +17,12 @@ function MenuItem({ menuItem, order_id}) {
         {menu_item_id: menuItem.id, quantity: 1},
         config
       );
-      
+     
     } catch (error) {}
   };
+
+ 
+
   return (
     <div>
       <div>

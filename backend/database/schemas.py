@@ -18,7 +18,7 @@ class RegisterSchema(ma.Schema):
     is_manager = fields.Boolean(missing=False)
     
     class Meta:
-        fields = ("id", "username",  "password", "first_name", "last_name", "email", "pin", "is_manager")
+        fields = ("id", "username",  "pin", "first_name", "last_name", "email", "is_manager")
 
     @post_load
     def create_user(self, data, **kwargs):
@@ -34,9 +34,10 @@ class UserSchema(ma.Schema):
     last_name = fields.String(required=True)
     pin = fields.Integer(required=True)
     email = fields.String(required=True)
+    is_manager = fields.Boolean(required=True)
     
     class Meta:
-        fields = ("id", "username", "first_name", "last_name", "email")
+        fields = ("id", "username", "first_name", "last_name", "email", "pin", "is_manager")
 
 register_schema = RegisterSchema()
 user_schema = UserSchema()
@@ -137,7 +138,7 @@ class OrderSchema(ma.Schema):
         return Order(**data)
 
 order_schema = OrderSchema()
-orders_schema = OrderSchema(many=False)
+orders_schema = OrderSchema(many=True)
 
 
 

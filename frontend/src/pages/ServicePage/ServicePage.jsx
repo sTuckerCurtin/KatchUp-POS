@@ -31,7 +31,7 @@ const ServicePage = () => {
       <div>
         <h1>Table Name: {table.name}</h1>
         {table.orders.map((order) =>(
-          <Order order={order}/>
+          <Order order={order} />
         ))}
         
       </div>

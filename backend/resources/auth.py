@@ -2,7 +2,7 @@ from flask import request
 from flask_jwt_extended import create_access_token
 from flask_restful import Resource
 from database.models import db, User
-from database.schemas import register_schema, user_schema
+from database.schemas import register_schema, user_schema, users_schema
 from marshmallow import ValidationError
 import datetime
 
@@ -41,3 +41,8 @@ class LoginResource(Resource):
         }
         access_token = create_access_token(identity=str(user.id), additional_claims=additional_claims, expires_delta=expires)
         return {'access': access_token}, 200
+
+class getAllUsers(Resource):
+    def get(self):
+        all_users = User.query.all()
+        return users_schema.dump(all_users)

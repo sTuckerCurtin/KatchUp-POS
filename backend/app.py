@@ -6,8 +6,8 @@ from flask_restful import Api
 from flask_migrate import Migrate
 from database.models import db
 from database.schemas import ma
-from resources.order import UserOrderResource, ManagementOrderResource, getCheckByTableID
-from resources.auth import LoginResource, RegisterResource
+from resources.order import UserOrderResource, ManagementOrderResource, getCheckByUserID
+from resources.auth import LoginResource, RegisterResource, getAllUsers
 from resources.transaction import UserTransactionResource, ManagerTransactionResource
 from resources.cars import AllCarResource, UserCarResource
 from resources.order_items import ServerOrderItemResource,EditOrderResource, CheckResource, OrderItemsResource
@@ -75,6 +75,7 @@ def create_routes():
     api.add_resource(EditOrderResource, "/api/order_items/<int:order_item_id>")
     api.add_resource(UserTransactionResource, "/api/transactions")
     api.add_resource(ManagerTransactionResource, "/api/transactions/<int:transaction_id>")
-    api.add_resource(getCheckByTableID, "/api/check/<int:table_id>")
+    api.add_resource(getCheckByUserID, "/api/check/<int:user_id>")
     api.add_resource(OrderItemsResource, "/api/orders/<int:order_id>/items")
+    api.add_resource(getAllUsers, "/api/employees")
     return api

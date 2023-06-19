@@ -6,9 +6,10 @@ from database.models import db, Order, User, Table
 from database.schemas import order_schema, orders_schema
 
 class UserOrderResource(Resource):
+  
     def get(self):
-        orders=Order.query.all()
-        return orders_schema.dump(orders)
+        orders = Order.query.all()
+        return orders_schema.dump(orders),200
     
 
     @jwt_required()
@@ -56,10 +57,10 @@ class ManagementOrderResource(Resource):
             return {'message': 'Order not found'}, 404
         return order_schema.dump(order), 200
 
-class getCheckByTableID(Resource):
-    @jwt_required()
-    def get(self, table_id):
-        order = Order.query.filter_by(table_id=table_id).first()
+class getCheckByUserID(Resource):
+   
+    def get(self, user_id):
+        order = Order.query.filter_by(user_id=user_id).first()
 
         order_item_data = []
         for item in order.items:

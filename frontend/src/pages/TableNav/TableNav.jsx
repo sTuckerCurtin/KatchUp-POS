@@ -45,12 +45,13 @@ const TableNav = () => {
       const config = {
         headers: { Authorization: `Bearer ${token}` },
       };
-      await axios.delete(`http://127.0.0.1:5000/api/${table_id}`, config);
+      await axios.delete(`http://127.0.0.1:5000/api/tables/${table_id}`, config);
       fetchTables();
     } catch (error) {
       console.log(error.response.data);
     }
   };
+  
 
   useEffect(() => {
     fetchTables();
