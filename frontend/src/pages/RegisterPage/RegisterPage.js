@@ -58,9 +58,9 @@ const RegisterPage = () => {
         <label>
           Pin:{" "}
           <input
-            type="password"
-            name="password"
-            value={formData.password}
+            type="pin"
+            name="pin"
+            value={formData.pin}
             onChange={handleInputChange}
           />
         </label>

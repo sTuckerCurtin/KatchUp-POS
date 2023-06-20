@@ -89,6 +89,9 @@ function ManagerPage() {
   useEffect(() => {
     getAllOrders();
   }, []);
+
+
+  
   return (
     <div className="pagelayout">
       <h1 className="title">Manager Page</h1>
