@@ -4,14 +4,17 @@ import MenuItem from "../../components/MenuItem/MenuItem";
 import ServicePage from "../../pages/ServicePage/ServicePage";
 import useAuth from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
-import Transaction from "../Transaction/Transaction";
-import "./Order.css"
+
+import "./Order.css";
+import CheckoutForm from "../CheckoutForm/CheckoutForm";
+import PaymentRender from "../PaymentRender/PaymentRender";
 
 function Order({ order }) {
   const [selectResults, setSelectResults] = useState(null);
   const [user, token, config] = useAuth();
   const [totalPrice, setTotalPrice] = useState(0);
   const [isCompleted, setIsCompleted] = useState(order.is_completed);
+  const [showPayment, setShowPayment] = useState(false); // New state variable
 
   const fetchMenuDetails = async (typeId) => {
     try {
@@ -34,11 +37,15 @@ function Order({ order }) {
     order.items.forEach((orderItem) => {
       totalPrice += orderItem.menu_item.price;
     });
-    return totalPrice.toFixed(2);
+    return parseInt(totalPrice);
   };
 
   const handleCompletionToggle = () => {
     setIsCompleted(!isCompleted);
+  };
+
+  const handlePaymentToggle = () => {
+    setShowPayment(!showPayment);
   };
 
   return (
@@ -68,10 +75,8 @@ function Order({ order }) {
               <button onClick={handleCompletionToggle}>
                 {isCompleted ? "Mark as Incomplete" : "Mark as Completed"}
               </button>
-              <Transaction
-                order_id={order.id}
-                totalPrice={calculateTotalPrice()}
-              />
+              <button onClick={handlePaymentToggle}>Toggle Payment</button> {/* New button */}
+              {showPayment && <PaymentRender totalPrice={totalPrice} />} {/* Conditional rendering of PaymentRender component */}
             </div>
           </div>
           <div className="card">

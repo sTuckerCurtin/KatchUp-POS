@@ -12,9 +12,12 @@ from resources.transaction import UserTransactionResource, ManagerTransactionRes
 from resources.cars import AllCarResource, UserCarResource
 from resources.order_items import ServerOrderItemResource,EditOrderResource, CheckResource, OrderItemsResource
 from resources.menu_items import AllMenuItemsResource, ServerMenuResource, UserMenuResource
+from resources.staxx import CreatePaymentIntentResource
 from resources.table import AllTableResource, UserTableResource, TableResource
+
 from dotenv import load_dotenv
 from os import environ
+import stripe
 
 
 # Adds variables from .env file to environment
@@ -49,6 +52,8 @@ def create_app():
     api.init_app(app)
     migrate.init_app(app, db)
 
+    
+    stripe.api_key = 'sk_test_51NL7X3IQQKESwEBor6MSZe6jY9Uz7AECP5Pf4qyyBxHAKV2k4jRlXUVwSM2aKMqg6je5r0CUgEkbSU4rs2UYb25m00I1EqZQit'
     return app
 
 
@@ -78,4 +83,7 @@ def create_routes():
     api.add_resource(getCheckByUserID, "/api/check/<int:user_id>")
     api.add_resource(OrderItemsResource, "/api/orders/<int:order_id>/items")
     api.add_resource(getAllUsers, "/api/employees")
+    api.add_resource(CreatePaymentIntentResource, '/api/payment-intent')
+
+    
     return api

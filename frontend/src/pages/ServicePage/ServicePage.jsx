@@ -18,24 +18,25 @@ const ServicePage = () => {
       );
       setTable(response.data);
     } catch (error) {
-      console.error(error.response.data);
+      console.error(error.response);
     }
   };
   useEffect(() => {
     fetchTable();
   }, [table_id]);
-
+  
   
   return (
     table && (
       <div>
         <h1>{table.name}</h1>
-        {table.orders.map((order) =>(
-          <Order order={order} />
+        {table.orders && table.orders.map((order) => (
+          <Order key={order.id} order={order} />
         ))}
-        
       </div>
     )
   );
+  
+  
 };
 export default ServicePage;
