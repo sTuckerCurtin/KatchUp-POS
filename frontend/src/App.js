@@ -22,8 +22,11 @@ import Footer from "./components/Footer/Footer";
 import PrivateRoute from "./utils/PrivateRoute";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import PaymentRender from "./components/PaymentRender/PaymentRender";
 
+const IP_ADDRESS = "3.137.170.196"
 
+const BASE_URL = `http://${IP_ADDRESS}:8000`
 
 export default function App() {
 
@@ -66,11 +69,17 @@ export default function App() {
           path="/pay"
           element={
             <PrivateRoute>
-              {/* <Elements stripe={stripePromise} options={options}> */}
+     
                 <CheckoutForm />
-              {/* </Elements> */}
+            
             </PrivateRoute>
           }
+        />
+        <Route path="render" element={
+          <PrivateRoute>
+            <PaymentRender />
+          </PrivateRoute>
+        }
         />
         <Route
           path="/managerpage"

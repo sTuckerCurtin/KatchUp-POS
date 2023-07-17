@@ -87,3 +87,9 @@ def create_routes():
 
     
     return api
+
+
+
+
+
+app = create_app()

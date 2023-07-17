@@ -32,7 +32,7 @@ class ManagementOrderResource(Resource):
     @jwt_required()
     def put(self, order_id):
         user_id = get_jwt_identity()
-        edit_order = Table.query.get_or_404(order_id)
+        edit_order = Order.query.get_or_404(order_id)
         if "table_id" in request.json:
             edit_order.table_id=request.json["table_id"]
         if "user_id" in request.json:

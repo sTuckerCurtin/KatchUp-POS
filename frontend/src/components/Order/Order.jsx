@@ -12,8 +12,8 @@ import PaymentRender from "../PaymentRender/PaymentRender";
 function Order({ order }) {
   const [selectResults, setSelectResults] = useState(null);
   const [user, token, config] = useAuth();
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [isCompleted, setIsCompleted] = useState(order.is_completed);
+  const [totalPrice, setTotalPrice] = useState(calculateTotalPrice()); // Updated state and initialization
+  
   const [showPayment, setShowPayment] = useState(false); // New state variable
 
   const fetchMenuDetails = async (typeId) => {
@@ -32,17 +32,14 @@ function Order({ order }) {
     fetchMenuDetails(typeId);
   };
 
-  const calculateTotalPrice = () => {
+  function calculateTotalPrice() {
     let totalPrice = 0;
     order.items.forEach((orderItem) => {
       totalPrice += orderItem.menu_item.price;
     });
-    return parseInt(totalPrice);
-  };
+    return totalPrice;
+  }
 
-  const handleCompletionToggle = () => {
-    setIsCompleted(!isCompleted);
-  };
 
   const handlePaymentToggle = () => {
     setShowPayment(!showPayment);
@@ -71,15 +68,12 @@ function Order({ order }) {
               </div>
             )}
             <div className="tranbuttons container">
-              <h3>Order Status: {isCompleted ? "Completed" : "Incomplete"}</h3>
-              <button onClick={handleCompletionToggle}>
-                {isCompleted ? "Mark as Incomplete" : "Mark as Completed"}
-              </button>
-              <button onClick={handlePaymentToggle}>Toggle Payment</button> {/* New button */}
-              {showPayment && <PaymentRender totalPrice={totalPrice} />} {/* Conditional rendering of PaymentRender component */}
+             
+              <button onClick={handlePaymentToggle} className="paybtn">Pay Now</button> 
+              {showPayment && <PaymentRender totalPrice={totalPrice} order={order} />} 
             </div>
           </div>
-          <div className="card">
+          <div className="card centerbox">
             <div className="card-body">
               <h2 className="card-title">Check</h2>
               <form>
@@ -97,7 +91,7 @@ function Order({ order }) {
                     />
                   </div>
                 ))}
-                <h2>Total Price: ${calculateTotalPrice()}</h2>
+                <h2>Total Price: ${totalPrice}</h2> 
                 <button type="submit">Send Order</button>
               </form>
             </div>

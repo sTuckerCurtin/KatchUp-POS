@@ -11,3 +11,13 @@
     top: -285px;
 }
 
+.centerbox{
+    position: absolute;
+    right: 582px;
+}
+
+.paybtn{
+    top: 110px;
+    position: relative;
+
+}

@@ -47,6 +47,7 @@ function CheckoutForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Pay");
 
     if (!stripe || !elements) {
       // Stripe.js hasn't yet loaded.
@@ -83,18 +84,11 @@ function CheckoutForm() {
   };
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit}>
-      <Elements stripe={stripe}>
-        <PaymentElement id="payment-element" options={paymentElementOptions} />
-      </Elements>
-      <button disabled={isLoading || !stripe || !elements} id="submit">
-        <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
-        </span>
-      </button>
-      {/* Show any error or success messages */}
-      {message && <div id="payment-message">{message}</div>}
-    </form>
+    
+    <form>
+    <PaymentElement />
+    <button>Submit</button>
+  </form>
   );
 }
 

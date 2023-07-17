@@ -9,7 +9,7 @@ from database.schemas import transaction_schema, transactions_schema
 class UserTransactionResource(Resource):
     def get(self):
         transaction=Transaction.query.all()
-        return transaction_schema.dump(transaction)
+        return transactions_schema.dump(transaction)
     
     @jwt_required()
     def post(self):
