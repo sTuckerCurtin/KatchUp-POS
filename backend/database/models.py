@@ -10,6 +10,7 @@ class User(db.Model):
     first_name = db.Column(db.String(255), nullable=False)
     last_name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False, unique=True)
+    is_manager = db.Column(db.Boolean, default=False)
 
     def hash_pin(self):
         self.pin = generate_password_hash(str(self.pin)).decode('utf8')
@@ -35,35 +36,51 @@ class Car(db.Model):
 
 class Table(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    table_name = db.Column(db.String(255), nullable=False)
+    name = db.Column(db.String(255), nullable=False)
+    seats = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
     user = db.relationship("User")
 
 
-class Categorized_dishes(db.Model):
+class ItemType(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    dish_type = db.Column(db.String(255), nullable=False)
+    type = db.Column(db.String(255), nullable=False)
 
-class Menu_items(db.Model):
+class MenuItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    dish_name = db.Column(db.String(255), nullable=False)
+    name = db.Column(db.String(255), nullable=False)
     price = db.Column(db.Float, nullable=False)
-    dish_type_id = db.Column(db.Integer, db.ForeignKey("categorized_dishes.id"))
+    type_id = db.Column(db.Integer, db.ForeignKey("item_type.id"))
 
-    dish_type = db.relationship("Categorized_dishes")
+    type = db.relationship("ItemType")
 
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    total = db.Column(db.Float, nullable=False)
-    date = db.Column(db.Date, nullable=False)
-    menu_item_id = db.Column(db.Integer, db.ForeignKey('menu_items.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     payment_id = db.Column(db.String(255), nullable=False)
-    status = db.Column(db.String(100), nullable=False)
-    amount_paid = db.Column(db.Float, nullable=False)
-    currency = db.Column(db.String(3), nullable=False)
-    payment_method = db.Column(db.String(50), nullable=False)
+    created_at = db.Column(db.Date, nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey("order.id"), nullable=False)
+
+    order = db.relationship("Order")
+  
+
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    table_id = db.Column(db.Integer, db.ForeignKey("table.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    is_completed = db.Column(db.Boolean, default=False)
+
 
     user = db.relationship("User")
-    menu_item = db.relationship("Menu_items")
+    table = db.relationship("Table", backref=db.backref("orders") )
+
+class OrderItems(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    quantity = db.Column(db.Integer, default=1)
+    order_id = db.Column(db.Integer, db.ForeignKey("order.id"), nullable=False)
+    menu_item_id = db.Column(db.Integer, db.ForeignKey("menu_item.id"), nullable=False)
+
+    order = db.relationship("Order", backref=db.backref("items"))
+    menu_item = db.relationship("MenuItem")
+

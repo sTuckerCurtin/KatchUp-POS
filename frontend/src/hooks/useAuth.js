@@ -3,7 +3,11 @@ import AuthContext from "../context/AuthContext";
 
 const useAuth = () => {
   const { user, token } = useContext(AuthContext);
-  return [user, token];
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  return [user, token, config];
+  
 };
 
 export default useAuth;

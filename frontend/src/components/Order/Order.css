@@ -1,0 +1,23 @@
+.sidebutton{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    top: -284px;
+}
+
+.tranbuttons{
+    position: relative;
+    left: 850px;
+    top: -285px;
+}
+
+.centerbox{
+    position: absolute;
+    right: 582px;
+}
+
+.paybtn{
+    top: 110px;
+    position: relative;
+
+}

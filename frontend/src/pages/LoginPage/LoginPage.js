@@ -6,7 +6,7 @@ import "./LoginPage.css";
 
 const LoginPage = () => {
   const { loginUser, isServerError } = useContext(AuthContext);
-  const defaultValues = { username: "", password: "" };
+  const defaultValues = { username: "", pin: "" };
   const [formData, handleInputChange, handleSubmit, reset] = useCustomForm(
     defaultValues,
     loginUser
@@ -22,7 +22,7 @@ const LoginPage = () => {
     <div className="container">
       <form className="form" onSubmit={handleSubmit}>
         <label>
-          Username:{" "}
+          Username:
           <input
             type="text"
             name="username"
@@ -31,18 +31,18 @@ const LoginPage = () => {
           />
         </label>
         <label>
-          Password:{" "}
+          PIN:
           <input
             type="password"
-            name="password"
-            value={formData.password}
+            name="pin"
+            value={formData.pin}
             onChange={handleInputChange}
           />
         </label>
         {isServerError ? (
           <p className="error">Login failed, incorrect credentials!</p>
         ) : null}
-        <Link to="/register">Click to register!</Link>
+        
         <button>Login!</button>
       </form>
     </div>

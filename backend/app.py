@@ -6,10 +6,19 @@ from flask_restful import Api
 from flask_migrate import Migrate
 from database.models import db
 from database.schemas import ma
-from resources.auth import LoginResource, RegisterResource
+from resources.order import UserOrderResource, ManagementOrderResource, getCheckByUserID
+from resources.auth import LoginResource, RegisterResource, getAllUsers
+from resources.transaction import UserTransactionResource, ManagerTransactionResource
 from resources.cars import AllCarResource, UserCarResource
+from resources.order_items import ServerOrderItemResource,EditOrderResource, CheckResource, OrderItemsResource
+from resources.menu_items import AllMenuItemsResource, ServerMenuResource, UserMenuResource
+from resources.staxx import CreatePaymentIntentResource
+from resources.table import AllTableResource, UserTableResource, TableResource
+
 from dotenv import load_dotenv
 from os import environ
+import stripe
+
 
 # Adds variables from .env file to environment
 load_dotenv()
@@ -43,6 +52,8 @@ def create_app():
     api.init_app(app)
     migrate.init_app(app, db)
 
+    
+    stripe.api_key = 'sk_test_51NL7X3IQQKESwEBor6MSZe6jY9Uz7AECP5Pf4qyyBxHAKV2k4jRlXUVwSM2aKMqg6je5r0CUgEkbSU4rs2UYb25m00I1EqZQit'
     return app
 
 
@@ -56,5 +67,29 @@ def create_routes():
     api.add_resource(AllCarResource, '/api/cars')
     api.add_resource(UserCarResource, '/api/user_cars')
     # TODO: Create files for your Resources in resources folder, add them here
+    api.add_resource(AllTableResource, "/api/tables")
+    api.add_resource(UserTableResource, "/api/user_tables")
+    api.add_resource(TableResource, "/api/tables/<int:table_id>")
+    api.add_resource(AllMenuItemsResource, "/api/menu_items")
+    api.add_resource(ServerMenuResource, "/api/menu_items/<int:type_id>")
+    api.add_resource(UserMenuResource, "/api/menu_items/<int:menu_item_id>")
+    api.add_resource(UserOrderResource, "/api/orders")
+    api.add_resource(ManagementOrderResource, "/api/orders/<int:order_id>")
+    api.add_resource(ServerOrderItemResource, "/api/order_items")
+    api.add_resource(CheckResource, "/api/order_items/<int:order_id>")
+    api.add_resource(EditOrderResource, "/api/order_items/<int:order_item_id>")
+    api.add_resource(UserTransactionResource, "/api/transactions")
+    api.add_resource(ManagerTransactionResource, "/api/transactions/<int:transaction_id>")
+    api.add_resource(getCheckByUserID, "/api/check/<int:user_id>")
+    api.add_resource(OrderItemsResource, "/api/orders/<int:order_id>/items")
+    api.add_resource(getAllUsers, "/api/employees")
+    api.add_resource(CreatePaymentIntentResource, '/api/payment-intent')
+
     
     return api
+
+
+
+
+
+app = create_app()

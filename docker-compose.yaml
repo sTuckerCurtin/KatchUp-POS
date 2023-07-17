@@ -1,0 +1,34 @@
+version: '3.4'
+services:
+  db:
+    # build: ./database
+    image: tucker245/katchup-database:latest
+    ports:
+      - 3307:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    restart: always
+    volumes:
+      - db-data:/var/lib/mysql
+  api:
+    build: ./backend
+    image: tucker245/katchup-backend:latest
+    ports:
+      - 8000:8000
+    restart: always
+    depends_on:
+      - "db"
+    command: >
+      sh -c "flask db upgrade && gunicorn -b 0.0.0.0 app:app"
+  frontend:
+    # build: ./frontend
+    image: tucker245/katchup-frontend:latest
+    ports:
+      - 3000:3000
+      - 80:80
+      - 443:443
+    depends_on:
+      - "api"
+volumes:
+  db-data:
+  
